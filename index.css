@@ -1,6 +1,6 @@
 @font-face {
     font-family: molFont;
-    src: url(../assets/molFont.otf);
+    src: url(./website/assets/molFont.otf);
   }
   
   body, pre {
