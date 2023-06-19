@@ -1,5 +1,7 @@
 "use strict"
 
+import { DropboxClient } from "../js/dropbox_api.js"
+
 let unload = true;
 
 window.onbeforeunload = function() {
@@ -8,6 +10,8 @@ window.onbeforeunload = function() {
     }
     return "Data will be lost if you leave the page, are you sure?";
 };
+
+let client = new DropboxClient()
 
 /* Deelnemers */
 
@@ -77,14 +81,12 @@ class Eliminatie {
     displayVragen() {
         let vraag = document.getElementById("vraag");
         // show sidebar
-        for (let i = 0; i < 20; i++) {
-            document.getElementById("sidebar").children[i].hidden = i >= eliminatie.aantal_vragen;
-        }
+        
         // hide or show elimination
         document.getElementById("eliminatie").hidden = this.selected_vraag == undefined;
         // show selected question
         vraag.children[0].textContent = this.vragen[this.selected_vraag].nr + ". " + this.vragen[this.selected_vraag].vraag;
-        if (this.vragen[this.selected_vraag].type != "top") {
+        if (this.vragen[this.selected_vraag].type != "rank") {
             // show options
             let opties = vraag.querySelectorAll(".optie");
             let index = 0;
@@ -202,7 +204,7 @@ class Eliminatie {
     
     checkVolledig() {
         return this.vragen.filter(v => {
-            if (v.type != "top") return v.keuze == undefined
+            if (v.type != "rank") return v.keuze == undefined
             else return !v.beantwoord
         }).length == 0
     }
@@ -215,7 +217,7 @@ class Eliminatie {
             this._selected_vraag = index;
             return
         }
-        if (this.vragen[this.selected_vraag].type == "top") {
+        if (this.vragen[this.selected_vraag].type == "rank") {
             if (document.getElementById("deelnemersraster")) {
                 document.getElementById("deelnemersraster").remove();
             }
@@ -245,7 +247,7 @@ class Eliminatie {
             this.vraag = vraag;
             this.opties = opties;
             this.aantal_opties = opties.length;
-            this.keuze = type=="top" ? new Array(this.top)  : undefined;
+            this.keuze = type=="rank" ? new Array(this.top)  : undefined;
             this.nr = undefined;
             this.type = type
             this.beantwoord = false
@@ -269,27 +271,25 @@ class Eliminatie {
     }
     
     function setVragen() {
-        let active = undefined
-        fetch("./data/eliminatie/config.json").then(resolve => {
-            return resolve.json();
-        }).then(json => {
-            if (json.active == undefined) {
+        client.readFile("/vragenlijsten.json").then(json => {
+            json = JSON.parse(json)
+            let actief_idx = json.findIndex((e => e.actief))
+            console.log(json, actief_idx)
+            if (actief_idx == -1) {
                 alert("Fout bij organisatoren: geen actieve eliminatie")
                 window.location.href = "./"
                 return
             } else {
-                active = json.active
-                for (let deelnemer of Object.keys(json.deelnemers)) {
-                    deelnemers[deelnemer] = {}
-                    deelnemers[deelnemer].pasvraag = json.deelnemers[deelnemer].pasvraag
-                    deelnemers[deelnemer].joker = json.deelnemers[deelnemer].joker
-                    deelnemers[deelnemer].jokerGebruikt = 0
-                }
-                return fetch("./eliminatie_vragen_filtered/"+json.active).then(response => {
-                    return response.json()
-                }).then(json => {
-                    let vragen = json.map(v => new Vraag(v.vraag, v.opties, v.type))
-                    eliminatie = new Eliminatie(vragen, active)
+                client.readFile("/deelnemers.json").then(text => {
+                    let deelnemers_json = JSON.parse(text)
+                    for (let deelnemer of deelnemers_json) {
+                        deelnemers[deelnemer.naam] = {}
+                        deelnemers[deelnemer.naam].pasvraag = deelnemer.pasvragen
+                        deelnemers[deelnemer.naam].joker = deelnemer.jokers
+                        deelnemers[deelnemer.naam].jokerGebruikt = 0
+                    }
+                    let vragen = json[actief_idx].vragen.map(v => new Vraag(v.vraag, v.opties, v.type))
+                    eliminatie = new Eliminatie(vragen, json[actief_idx].naam)
                     setupDropdown();                    
                 })
             }
@@ -312,7 +312,7 @@ class Eliminatie {
             "minuten": timer.getMinutes(),
             "seconden": timer.getSeconds(),
             "antwoorden": data.vragen.map((e,i,r) => {
-                if (e.type != "top") {
+                if (e.type != "rank") {
                     return e.keuze
                 } else {
                     return e.keuze.map(v => e.opties.indexOf(v))
@@ -351,6 +351,13 @@ function clockStart() {
         document.getElementById("pasvragen").innerHTML = "pasvragen: " + deelnemers[naamKeuze.textContent]["pasvraag"] //+ " | jokers: " + deelnemers[naamKeuze.textContent]["joker"] + "(gebruikt: " + deelnemers[naamKeuze.textContent]["jokerGebruikt"] + ")";
         naam.querySelector(".dropdown").hidden = true;
         start.hidden = true;
+        for (let i = 0; i < eliminatie.aantal_vragen; i++) {
+            let new_node = document.createElement("div")
+            new_node.innerHTML = `${i}.`
+            new_node.addEventListener("click", function(i) {return function() {jumpToVraag(i)}}(i))
+            document.getElementById("sidebar").append(new_node);
+            console.log("e")
+        }
         eliminatie.selected_vraag = 0;
         eliminatie.displayVragen();
         timerId = setInterval(update, 1000);
@@ -373,14 +380,9 @@ function clockStop() {
     let clock = document.getElementById('clock');
     clock.style.backgroundColor = "#46aebc";
     setTimeout(() => clock.style.backgroundColor ="", 2000);
-    fetch("./send_eliminatie", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(convertToSend(eliminatie))
-      }).then( response => {
-        if (!response.ok) {
+    let path = `/${eliminatie.naam}/${document.getElementById("naamKeuze").textContent}_${new Date().toLocaleTimeString()}.json`
+    client.writeFile(path, JSON.stringify(convertToSend(eliminatie))).then( response => {
+        if (response == undefined) {
             let opnieuw = confirm("Verzenden mislukt!\nOpnieuw proberen?");
             document.getElementById("eliminatie").hidden = true;
             if (!opnieuw) {
@@ -392,11 +394,22 @@ function clockStop() {
         else {
             document.body.innerHTML = "<div class='info'><p>Bedankt.</p><p>De Eliminatie-vragen zijn goed ingevuld.</p></div><div class='loadingBox'><div id='loadingBar'></div></div>";
             unload = true;
-            let return_href = document.location.protocol == "file:" ? "./index.html" : "./";
+            let return_href = "../../index.html";
             setTimeout(() => loadingBar.style.width = "100%",100);
             setTimeout(() => window.location.href = return_href, 5100);
         }
       })
 }
-    
+
+document.querySelector("#naam > .dropdown").addEventListener("click", showDropdown)
+document.querySelector("#start").addEventListener("click", clockStart)
+document.querySelectorAll("#vraagNav > .button")[0].addEventListener("click", prevVraag)
+document.querySelectorAll("#vraagNav > .button")[1].addEventListener("click", nextVraag)
+document.querySelector("#joker").addEventListener("click", () => checkboxClick("joker"))
+let iter = 0
+for (let optie_checkbox of document.querySelectorAll("#vraag > div > div > .optie")) {
+    optie_checkbox.addEventListener("click", function(i) {return function() {checkboxClick(i)}}(iter))
+    document.querySelector("#submit").addEventListener("click", clockStop)
+    iter++
+}
 

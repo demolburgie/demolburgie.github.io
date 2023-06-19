@@ -24,17 +24,16 @@ export class DropboxClient {
                 "Content-Type": "application/octet-stream",
             },
             data
-        ).then((response) => {
-            if (response.OK) {
-                return true;
-            } else {
-                response.json();
-                return false;
-            }
-        });
+        )
     }
 
-
+    getFilesInFolder = async function(path_to_folder) {
+        return this.fetch("https://api.dropboxapi.com/2/files/list_folder", "POST", {"Content-Type": "application/json"}, `{"path": "${path_to_folder}"}`)
+            .then((response) => {
+                let json = JSON.parse(response)
+                return json.entries.map((e) => e.name)
+            })
+    }
 
     fetch = async function(path, method, headers={}, data=undefined) {
         let final_headers = new Headers();
@@ -43,12 +42,13 @@ export class DropboxClient {
         let options = {method: method, headers: final_headers, body: data}
         return fetch(path, options).then((response) => {
             if (response.ok) {
-                return response.json()
+                return response.text()
             } else {
                 if (response.status == 401) {
                     return this.refreshToken().then(() => {return this.fetch(path, method, headers, data)})
                 } else {
                     alert("could not connect to database")
+                    return
                 }
             }
         })
