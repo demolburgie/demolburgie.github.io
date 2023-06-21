@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+  <title>De Mol | Escape Room</title>
+  <link rel="stylesheet" href=../../index.css>
+  <link rel="stylesheet" href=escape_room.css>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+
+</head>
+
+<body>
+    <div hidden id="main-info" style="text-align: center;">
+        <p style="font-size: 3rem;"></p>
+        <div id=clock style="font-size: 8rem;">
+            <span id="min">01</span>:<span id="sec">00</span>
+        </div>
+    </div>
+    <div>
+        <button hidden class="button" id="lock-button"><span style="font-size: 5rem">Click Me!</span><br><span style="font-size: 1rem">(or the space bar)</span></button>
+    </div>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="escape_room.js"></script>
+</body>

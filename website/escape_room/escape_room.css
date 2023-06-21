@@ -1,0 +1,28 @@
+.button {
+    border-style: solid;
+    border-color: #46aebc;
+    background-color: black;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 10px;
+    font-family: molFont;
+    color: #d4ebf3;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #46aebc;
+}
+
+body {
+    margin: 0;
+    background-image: url(./assets/background_neutral.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    min-height: 100vh;
+}
