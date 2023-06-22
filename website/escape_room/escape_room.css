@@ -10,8 +10,37 @@
     text-align: center;
 }
 
+#code-input .button {
+    border-style: solid;
+    border-color: #46aebc;
+    background-color: black;
+    margin: 10px;
+    font-family: molFont;
+    color: #d4ebf3;
+    text-align: center;
+}
+
+
+
 .button:hover {
     background-color: #46aebc;
+}
+#code-input .button:hover {
+    background-color: #46aebc;
+}
+
+input, input:focus {
+    outline: none !important;
+    font-size: 1.5rem;
+    border-style: solid;
+    border-color: #46aebc;
+    background-color: black;
+    margin: 10px;
+    font-family: molFont;
+    color: #d4ebf3;
+    text-align: center;
+    opacity: 0.8;
+    text-transform: uppercase;
 }
 
 body {
@@ -20,9 +49,46 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    min-height: 100vh;
+}
+
+#main {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     min-height: 100vh;
+}
+
+dialog {
+    top: -100px;
+    opacity: 0.7;
+    border-style: solid;
+    border-color: #46aebc;
+    background-color: black;
+    color: #d4ebf3;
+    transition: 0.5s ease-in-out;
+    -webkit-transition: 0.5s ease-in-out;
+}
+
+.popin {
+    transform: translateY(100px);
+    -webkit-transform:translateY(100px);
+}
+
+#code-input {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+#flappy {
+    position: absolute;
+    top: 20%;
+    left: 20px;
+    height: 60%;
 }

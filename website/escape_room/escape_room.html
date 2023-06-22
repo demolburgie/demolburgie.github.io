@@ -8,15 +8,27 @@
 </head>
 
 <body>
-    <div hidden id="main-info" style="text-align: center;">
-        <p style="font-size: 3rem;"></p>
-        <div id=clock style="font-size: 8rem;">
-            <span id="min">01</span>:<span id="sec">00</span>
+    <audio id="audio" src="assets/code_digits_reversed.mp3" loop></audio>
+    <dialog open>This is an open dialog window</dialog>
+    <div id="main">
+        <div hidden id="main-info" style="text-align: center;">
+            <p style="font-size: 3rem;"></p>
+            <div id=clock style="font-size: 8rem;">
+                <span id="min">01</span><span id="morse">:</span><span id="sec">00</span>
+            </div>
+        </div>
+        <div>
+            <button hidden class="button" id="lock-button"><span style="font-size: 5rem">Click Me!</span><br><span style="font-size: 1rem">(or the space bar)</span></button>
         </div>
     </div>
-    <div>
-        <button hidden class="button" id="lock-button"><span style="font-size: 5rem">Click Me!</span><br><span style="font-size: 1rem">(or the space bar)</span></button>
+    <div id="code-input">
+        <p>Nog 5 resterende clicks</p>
+        <div>
+            <input>
+            <button class="button" style="font-size: 1.5rem;">OK</button>
+        </div>
     </div>
+    <iframe id="flappy" src="flappy_bird.html"></iframe>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="escape_room.js"></script>
 </body>
