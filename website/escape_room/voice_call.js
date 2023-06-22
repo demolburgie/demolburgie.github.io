@@ -95,7 +95,7 @@ document.querySelector("#call2").addEventListener("click", () => {
     // set info
     document.getElementById("start-call").hidden = true;
     document.getElementById("requesting-call").hidden = false;
-    document.getElementById("requesting-call").innerHTML = `Calling ${document.querySelector("#call1").innerHTML}...`
+    document.getElementById("requesting-call").innerHTML = `Calling ${document.querySelector("#call2").innerHTML}...`
     store_call = peer.call(code, window.localStream); // A
 
     store_call.on("stream", (stream) => {
