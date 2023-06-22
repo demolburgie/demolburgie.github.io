@@ -145,6 +145,7 @@ function render() {
         document.getElementById("lock-button").hidden = true
         document.querySelector("#code-input p").hidden = true
         document.querySelector("#code-input > div").hidden = true
+        document.querySelector("#voice-call-section").hidden = true
         document.getElementById("flappy").hidden = true
         document.body.style.backgroundImage = "url(./assets/background_neutral.png)"
         
@@ -154,6 +155,7 @@ function render() {
         document.querySelector("#code-input p").hidden = true
         document.querySelector("#code-input > div").hidden = true
         document.getElementById("flappy").hidden = true
+        document.querySelector("#voice-call-section").hidden = true
         document.body.style.backgroundImage = "url(./assets/background_neutral.png)"
         
     } else if (door_status.status == "started" && door_status.unlocked_room == room_id) { // Open
@@ -162,6 +164,7 @@ function render() {
         document.querySelector("#code-input p").hidden = false
         document.querySelector("#code-input > div").hidden = false
         document.querySelector("#main-info > p").textContent = text_open
+        document.querySelector("#voice-call-section").hidden = false
         document.getElementById("flappy").hidden = false
         document.body.style.backgroundImage = "url(./assets/background_open.png)"
         
@@ -172,6 +175,7 @@ function render() {
         document.querySelector("#code-input > div").hidden = false
         document.getElementById("flappy").hidden = false
         document.querySelector("#main-info > p").textContent = text_closed
+        document.querySelector("#voice-call-section").hidden = false
         document.body.style.backgroundImage = "url(./assets/background_closed.png)"
         
     }
