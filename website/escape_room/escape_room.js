@@ -72,7 +72,7 @@ function startFlappyTime() {
         }
         innerHTML = innerHTML.concat(`<br>Next reward in ${(m >= 10 ? "" : "0")+m}:${(s >= 10 ? "" : "0")+s}`)
     }
-    flappy_doc.querySelector("#InstructionBox > div").innerHTML = innerHTML
+    document.getElementById("flappy").contentDocument.querySelector("#InstructionBox > div").innerHTML = innerHTML
     setTimeout(startFlappyTime, 1000)  
 }
 
@@ -129,13 +129,13 @@ function updateFlappyStatus(new_flappy_status) {
         let time_diff = flappy_status[a+"_time"].getTime() - flappy_status[b+"_time"].getTime() > 0 ? 0.1 : -0.1
         return flappy_status[b] - (flappy_status[a]-time_diff)
     })
-    flappy_doc.querySelector("#leaderboard").innerHTML = "<span>Leaderboard</span>"
+    document.getElementById("flappy").contentDocument.querySelector("#leaderboard").innerHTML = "<span>Leaderboard</span>"
 
     for (let i=0; i<players.length; i++) {
-        let child = flappy_doc.createElement("div")
+        let child = document.getElementById("flappy").contentDocument.createElement("div")
         child.innerHTML = `${i+1}.&emsp;${players[i]}&emsp;&emsp;${flappy_status[players[i]]}`
         child.style.fontSize="4vh"
-        flappy_doc.querySelector("#leaderboard").append(child)
+        document.getElementById("flappy").contentDocument.querySelector("#leaderboard").append(child)
     }
 }
 
@@ -180,8 +180,6 @@ function render() {
 window.updateHighscore = function(score) {
     socket.emit("flappy", {room_id: room_id, score, score})
 }
-
-let flappy_doc = document.getElementById("flappy").contentDocument;
 
 let socket = io("http://192.168.0.253:3000/");
 // let socket = io("https://de-mol-escape-room.glitch.me");
