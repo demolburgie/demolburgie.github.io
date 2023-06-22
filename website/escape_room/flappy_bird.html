@@ -252,8 +252,6 @@
                     Lost = true; //Set the lost flag to true, so they can't unpause;
                     pauseGame(); //"Pause" the game              
                     var cookieScore = sessionStorage.getItem("HighScore");      
-                    console.log(Math.max(CurrentScore,cookieScore));
-                    console.log(cookieScore);
                     sessionStorage.setItem('HighScore', Math.max(CurrentScore,cookieScore), 30000); //Store the highest score between current score and saved score
                     Birdy.BirdyObject.animate({top:'90%'}, 1500, 'linear'); //Drop our birdy
                     $('#FinalScore').html(CurrentScore); //Update the current score
@@ -436,7 +434,6 @@
                 function checkCollisions(){
                     $('.Pipe').each(function(){
                         if(isIntersecting(Birdy.BirdyObject, $(this))){
-                            console.log('Hit!');
                             endGame();
                         }
                     });
@@ -465,7 +462,6 @@
                     //We're out of bounds if the bottom of the bird is below the bottom of the canvas
                     //OR if the bird's top is above the canvas top
                     if(birdy.offset().top+birdy.height()> canvas.offset().top+canvas.height() || birdy.offset().top<canvas.offset().top){ 
-                        console.log('Out of Bounds!'); //Print out that we're out of bounds
                         endGame();
                     }
                 }
@@ -477,7 +473,6 @@
                         var PipeRightXPos = $(this).offset().left + $(this).width(); //Calculate the X coordinate of the pipe's right edge.
                         if(!$(this).data('scored') && BirdyBeakXPos>PipeRightXPos){ //If we're ahead of the pipe and we haven't scored on it yet, add to the score.
                             CurrentScore++; //Increment score
-                            console.log(CurrentScore); //Write to console the score we currently have for debugging purposes
                             $(this).data('scored', true); //Mark the pipe as scored, so we won't look at it again
                         }
                     });          

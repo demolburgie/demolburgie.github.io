@@ -4,7 +4,7 @@
   <link rel="stylesheet" href=../../index.css>
   <link rel="stylesheet" href=escape_room.css>
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
-
+  <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
 </head>
 
 <body>
@@ -20,6 +20,26 @@
         <div>
             <button hidden class="button" id="lock-button"><span style="font-size: 5rem">Click Me!</span><br><span style="font-size: 1rem">(or the space bar)</span></button>
         </div>
+        <div id="voice-call-section" style="font-size: 2.5rem; text-transform: uppercase;">
+            <audio controls id="remoteAudio" hidden></audio>
+            <audio controls id="localAudio" muted="true" hidden></audio>
+            <div id="start-call">
+                <div style="display:flex; flex-direction: row; justify-content: space-evenly;">Call:</div>
+                <div>
+                </div>
+                <button id="call1" class="button" style="font-size: 2.5rem; text-transform: uppercase;"></button>
+                <button id="call2" class="button" style="font-size: 2.5rem; text-transform: uppercase;"></button> 
+            </div>
+            <div id="requesting-call" hidden style="font-size: 2.5rem; text-transform: uppercase;"></div>
+            <div id="answer-call" hidden>
+                <div id="incoming-call-info"></div>
+                <button id="accept-call" class="button" style="font-size: 2.5rem; text-transform: uppercase;">Accept</button>
+                <button id="deny-call" class="button" style="font-size: 2.5rem; text-transform: uppercase;">Deny</button> 
+            </div>
+            <div id="call-busy" hidden>
+                <button style="font-size: 2.5rem; text-transform: uppercase;" id="stop-call" class="button">Hang Up</button>
+            </div>
+        </div>
     </div>
     <div id="code-input">
         <p>Nog 5 resterende clicks</p>
@@ -30,5 +50,6 @@
     </div>
     <iframe id="flappy" src="flappy_bird.html"></iframe>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="escape_room.js"></script>
+    <script src="escape_room.js" defer></script>
+    <script src="voice_call.js" defer></script>
 </body>

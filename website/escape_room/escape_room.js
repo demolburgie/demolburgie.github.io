@@ -1,7 +1,7 @@
 "use strict"
 
 let room_id = sessionStorage.getItem("room_id")
-
+window.room_id = room_id
 let door_status = {
     status: null,
     unlocked_room: null,
@@ -81,6 +81,9 @@ if (room_id == null) {
     sessionStorage.setItem("room_id", room_id)
 }
 
+document.getElementById("call1").innerHTML = room_id == "room1" ? "room2" : "room1"
+document.getElementById("call2").innerHTML = room_id == "room3" ? "room2" : "room3"
+
 const text_closed = "Een andere kamerdeur opent over"
 const text_open = "Jullie kamerdeur opent over"
 
@@ -124,7 +127,6 @@ function updateFlappyStatus(new_flappy_status) {
     let players = ["room1", "room2", "room3", "noob"]
     players = players.sort((a, b) => {
         let time_diff = flappy_status[a+"_time"].getTime() - flappy_status[b+"_time"].getTime() > 0 ? 0.1 : -0.1
-        console.log(flappy_status[a]+time_diff)
         return flappy_status[b] - (flappy_status[a]-time_diff)
     })
     flappy_doc.querySelector("#leaderboard").innerHTML = "<span>Leaderboard</span>"
@@ -176,13 +178,13 @@ function render() {
 }
 
 window.updateHighscore = function(score) {
-    console.log("score: ", score)
     socket.emit("flappy", {room_id: room_id, score, score})
 }
 
+let flappy_doc = document.getElementById("flappy").contentDocument;
 
-// let socket = io("http://192.168.0.253:3000/");
-let socket = io("https://de-mol-escape-room.glitch.me");
+let socket = io("http://192.168.0.253:3000/");
+// let socket = io("https://de-mol-escape-room.glitch.me");
 
 socket.on("update_door_status", updateDoorStatus)
 socket.on("update_code_status", updateCodeStatus)
@@ -199,10 +201,9 @@ document.getElementById('lock-button').addEventListener('click', lockOtherRoom);
 document.addEventListener("keydown", (e) => {if (e.key == " ") {lockOtherRoom()}})
 document.querySelector("#code-input button").addEventListener('click', sumbitCode)
 
-let flappy_doc = document.getElementById("flappy").contentDocument;
 
 startTime()
-startFlappyTime()
 render()
 showMorse("...___...")
+setTimeout(() => startFlappyTime(), 10*1000)
 socket.emit("get_code_status", room_id)
