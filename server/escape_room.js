@@ -14,6 +14,7 @@ const { networkInterfaces } = require('os');
 const N_CODES_START = 5;
 const nets = networkInterfaces();
 const results = {};
+const CENT_PER_CLICK = 1
 let codes = require("./getCodes.js")()
 
 let door_status = {
@@ -111,7 +112,7 @@ rl.question('chose HOST_IP?', host_ip => {
                 socket.emit("to_late");
                 return
             }
-            let code_check = codes.checkCode(data.code, data.room_id)
+            let code_check = codes.checkCode(data.code, data.room_id, CENT_PER_CLICK)
             console.log(`Room ${data.room_id} submitted code ${data.code}: ${code_check.message} [${code_check.n_clicks} clicks]`)
             code_status[data.room_id] = Math.max(0, code_status[data.room_id] + code_check.n_clicks)
             socket.emit("message", code_check.message)
@@ -145,8 +146,8 @@ function startFlappyTimer(period_in_min, start=false) {
         if (winner == "noob") {
             io.emit("flappy_message", `You are all flappy bird noobs. No reward.`)
         } else {
-            io.emit("flappy_message", `${winner} won 1 click with flappy bird.`)
-            code_status[winner] += 1
+            io.emit("flappy_message", `${winner} won 2 click and €0.${(CENT_PER_CLICK_PER_CLICK*2 >= 10 ? "" : "0") + CENT_PER_CLICK_PER_CLICK*2} with flappy bird.`)
+            code_status[winner] += 2
         }
     }
     let date = new Date();

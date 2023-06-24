@@ -23,7 +23,7 @@ class Code {
         }
         this.used = true
         this.used_tries += 1
-        return {n_clicks: this.n_clicks, message: "Code correct! "+ this.n_clicks == 1 ? "1 click added" : `${this.n_clicks} clicks added.`};
+        return {n_clicks: this.n_clicks, message: "Code correct! "+ this.n_clicks == 1 ? "1 click added" : `${this.n_clicks} clicks added. You earned €0.${(CENT_PER_CLICK_PER_CLICK*2 >= 10 ? "" : "0") + CENT_PER_CLICK_PER_CLICK*2}`};
     }
 
     triesLeft = function() {
@@ -50,7 +50,7 @@ class Codes {
         }
     }
 
-    checkCode = function(code, room) {
+    checkCode = function(code, room, CENT_PER_CLICK) {
         if (code+"@"+room in this.codes) {
             return this.codes[code+"@"+room].checkCode(room)
         }

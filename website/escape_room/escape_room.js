@@ -25,9 +25,13 @@ let audio_playing = false;
 
 function showMorse(morse, idx=0) {
     let node = document.getElementById("morse")
-    node.style.opacity = 0.0
-    setTimeout(() => node.style.opacity = 1.0, 250)
-    setTimeout(() => showMorse(morse, (idx+1)%(morse.length)), morse[idx] == "." ? 1000 : 2000)
+    if (morse[idx] == "/") {
+        setTimeout(() => showMorse(morse, (idx+1)%(morse.length)), 2000)
+    } else {
+        node.style.opacity = 0.0
+        setTimeout(() => node.style.opacity = 1.0, morse[idx] == "." ? 500 : 1500)
+        setTimeout(() => showMorse(morse, (idx+1)%(morse.length)), morse[idx] == "." ? 1000 : 2000)
+    }
 }
 
 function showDialog(message, time) {
@@ -206,6 +210,6 @@ document.querySelector("#code-input button").addEventListener('click', sumbitCod
 
 startTime()
 render()
-showMorse("...___...")
+showMorse("-.././/-.-./---/-.././/../...//.../.-/--/..-/./.-..////")
 setTimeout(() => startFlappyTime(), 10*1000)
 socket.emit("get_code_status", room_id)
