@@ -1,0 +1,30 @@
+@font-face {
+    font-family: molFont;
+    src: url(../assets/molFont.otf);
+}
+
+body {
+    font-family: "molFont";
+    font-size: 24px;
+    text-transform: uppercase;
+    background-color: black;
+    color: #d4ebf3;
+    height: 100%;
+    margin: 0px;
+    padding-bottom: 0px;
+}
+
+#timer {
+    display: table;
+    font-size: 240px;
+    position: absolute;
+    padding: 40px;
+    width: 60%;
+    top: 20%;
+    left: 15%;
+    border-width: 20px;
+    border-color: #46aebc;
+    border-style: solid;
+    text-align: center;
+    margin: 0 auto;
+}
