@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+  <title>De Mol Burgie</title>
+  <link rel="stylesheet" href=../index.css>
+  <link rel="icon" type="image/x-icon" href="website/assets/favicon.ico">
+
+</head>
+<body>
+  <script>
+    // auto reload
+    window.addEventListener( "pageshow", function ( event ) {
+    var historyTraversal = event.persisted || 
+                           ( typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2 );
+    if ( historyTraversal ) {
+      window.location.reload();
+    }
+  });
+    sessionStorage.clear("key")
+  </script>
+  <script src="index.js" type="module"></script>
+  <div id="header">
+    <img id="logo" src="website/assets/img/logo.jpg"/>
+    <span class="headerOption"><a href="./website/eliminatie/eliminatie.html">eliminatie</a></span>
+    <span class="headerOption"><a href="./website/login/login.html">makers</a></span>
+    <span class="headerOption"><a href="./website/eliminatie_scherm/eliminatie_scherm_config.html">eliminatie scherm</a></span>
+    <!-- <span class="headerOption"><a href="./code.html">code spel</a></span> -->
+    <span class="headerOption"><a href="./website/timer/timer.html">timer</a></span>
+    <span class="headerOption"><a href="./website/countdown/countdown.html">countdown</a></span>
+    <span class="headerOption"><a href="./website/escape_room/escape_room.html">escape room</a></span>
+  </div>
+  <div class="content">
+    <p class="info">Regels Uno</p>
+    <ul>
+        <li>Per uitgespeeld spel €1 (spelen door tot iedereen uit is)</li>
+        <li>45 minuten</li>
+        <li>niet eindigen met speciale kaart (zwarte, +2, overslaan, omkeren)</li>
+        <li>Geen uno en wordt opgemerkt voor de volgende een kaart legt of neemt -> 7 kaarten</li>
+        <li>+2, +4 op +2</li>
+        <li>enkel +4 op +4</li>
+
+    </ul>
+  </div>
+</body>
