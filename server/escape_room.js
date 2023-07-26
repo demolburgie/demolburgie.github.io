@@ -62,7 +62,7 @@ const rl = require('readline').createInterface({
 });
   
 rl.question('chose HOST_IP?', host_ip => {
-    host_ip = "192.168.56.1"
+    host_ip = "192.168.1.61"
     app.get('/', (req, res) => {
         res.sendFile('./escape_room/escape_room.html', {root: __dirname.slice(0, __dirname.length-6) + "website/"});
     });

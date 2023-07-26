@@ -189,8 +189,8 @@ window.updateHighscore = function(score) {
     socket.emit("flappy", {room_id: room_id, score, score})
 }
 
-let socket = io("http://192.168.1.61:3000/");
-// let socket = io("https://de-mol-escape-room.glitch.me");
+// let socket = io("http://192.168.1.61:3000/");
+let socket = io("https://de-mol-escape-room.glitch.me");
 
 socket.on("update_door_status", updateDoorStatus)
 socket.on("update_code_status", updateCodeStatus)
